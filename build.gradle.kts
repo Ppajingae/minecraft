@@ -24,6 +24,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+
+
     implementation("org.springframework.boot:spring-boot-starter-actuator") // 서버 상태 확인용 (선택)
 
     implementation("org.springframework.boot:spring-boot-starter") // Core 기능

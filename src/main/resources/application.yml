@@ -1,1 +1,3 @@
-spring.application.name=minecraft
+spring:
+  application:
+    name: minecraft
