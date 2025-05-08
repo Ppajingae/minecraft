@@ -17,7 +17,7 @@ class ServerController(
 
 
     @PostMapping("/server/start")
-    fun startServer(): ResponseEntity<BaseResponse<Any>>
+    fun startServer(): ResponseEntity<BaseResponse<out String?>>
         = ResponseEntity.status(HttpStatus.OK).body(serverService.startServer())
 
     @PostMapping("/server/stop")

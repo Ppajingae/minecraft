@@ -9,21 +9,33 @@ import java.time.LocalDateTime
 @Service
 class ServerService {
 
-    fun startServer(): BaseResponse<Any>? {
-        val processBuilder = ProcessBuilder("./bedrock_server")
-            processBuilder.directory(File("/home/kimdoguyn/minecraft"))
-            processBuilder.redirectOutput(File("stdout 로그 파일"))
-            processBuilder.redirectError(File("stderr 로그 파일"))
-        val process = processBuilder.start()
+    fun startServer(): BaseResponse<out String?> {
+        return try {
+            val processBuilder = ProcessBuilder("./bedrock_server")
+            processBuilder.directory(File("/minecraft"))
 
-            File("/home/kimdoguyn/minecraft/server.pid").writeText(process.pid().toString())
+            // 로그 파일 경로 명시 + 파일 생성
+            val stdout = File("/minecraft/stdout.log")
+            val stderr = File("/minecraft/stderr.log")
+            stdout.createNewFile()
+            stderr.createNewFile()
 
-        return BaseResponse.of(HttpStatus.OK.value(), LocalDateTime.now(),)
+            processBuilder.redirectOutput(stdout)
+            processBuilder.redirectError(stderr)
+
+            val process = processBuilder.start()
+            File("/minecraft/server.pid").writeText(process.pid().toString())
+
+            BaseResponse.of(HttpStatus.OK.value(), LocalDateTime.now(), "서버 실행됨", "")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            BaseResponse.of(HttpStatus.INTERNAL_SERVER_ERROR.value(), LocalDateTime.now(), null, "에러: ${e.message}")
+        }
     }
 
     fun stopServer(): BaseResponse<Any>? {
 
-        val pid = File("/home/kimdoguyn/minecraft/server.pid").readText().trim()
+        val pid = File("/minecraft/server.pid").readText().trim()
 
         ProcessBuilder("kill", pid).start()
 
@@ -51,12 +63,12 @@ class ServerService {
             val processBuilder = ProcessBuilder("./bedrock_server")
             val process = processBuilder.start()
 
-            File("/home/kimdoguyn/minecraft/server.pid").writeText(process.pid().toString())
+            File("/minecraft/server.pid").writeText(process.pid().toString())
         }else{
             val processBuilder = ProcessBuilder("./bedrock_server")
             val process = processBuilder.start()
 
-            File("/home/kimdoguyn/minecraft/server.pid").writeText(process.pid().toString())
+            File("/minecraft/server.pid").writeText(process.pid().toString())
         }
 
         return BaseResponse.of(HttpStatus.OK.value(), LocalDateTime.now())

@@ -1,0 +1,11 @@
+services:
+  spring-server:
+    container_name: minecraft-dev-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "19132:19132/udp"
+    volumes:
+      - /home/kimdoguyn/minecraft:/minecraft

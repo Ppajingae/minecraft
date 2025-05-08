@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 class FileService {
 
     fun getServerProperties(): BaseResponse<ServerPropertiesDto> {
-        val file = File("/home/kimdoguyn/minecraft/server.properties")
+        val file = File("/minecraft/server.properties")
         if (!file.exists()) throw IllegalArgumentException("file is not exists")
 
         val properties = file.readLines()
