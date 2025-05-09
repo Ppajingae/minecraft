@@ -11,7 +11,7 @@ class ServerUtils {
         TODO()
     }
 
-    // 서버에 파일이 필요할 경우
+    // 서버에 properties 파일 수정이 필요할 경우
     fun updateProperties(path: String, prefix: String, description: String){
         val propsFile = File(path)
         val lines = propsFile.readLines()
@@ -19,6 +19,14 @@ class ServerUtils {
             if (line.startsWith(prefix)) "level-name=$description" else line
         }
         propsFile.writeText(updatedLines.joinToString("\n"))
+    }
+
+    // 서버에 properties 파일 수정이 필요할 경우
+    fun getProperties(file: File): Map<String, String>{
+        return file.readLines()
+            .filter { it.isNotBlank() && !it.startsWith("#") }
+            .map { it.split("=", limit = 2) }
+            .associate { it[0] to it.getOrElse(1) { "" } }
     }
 
     //서버에서 디렉터리를 삭제하는 경우
